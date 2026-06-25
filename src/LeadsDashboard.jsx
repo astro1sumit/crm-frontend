@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // 👇 Use environment variable for backend URL (falls back to localhost)
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function LeadsDashboard() {
   const [activeTab, setActiveTab] = useState('pipeline'); // Manage navigation tabs ('pipeline' or 'automation')
