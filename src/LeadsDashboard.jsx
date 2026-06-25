@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// 👇 Use environment variable for backend URL (falls back to localhost)
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 export default function LeadsDashboard() {
   const [activeTab, setActiveTab] = useState('pipeline'); // Manage navigation tabs ('pipeline' or 'automation')
   const [leads, setLeads] = useState([]);
@@ -22,7 +25,7 @@ export default function LeadsDashboard() {
   // Request token securely from backend auth pipeline – now with password
   const handleIdentityLogin = async (name, inputPassword) => {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/auth/login', {
+      const response = await fetch(`${API_BASE}/api/v1/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: name, password: inputPassword }) // Sends the passcode down the wire safely
@@ -53,7 +56,7 @@ export default function LeadsDashboard() {
   const fetchLeads = async () => {
     if (!token) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/leads?_cb=${Date.now()}`, {
+      const response = await fetch(`${API_BASE}/api/v1/leads?_cb=${Date.now()}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.status === 401 || response.status === 403) {
@@ -77,7 +80,7 @@ export default function LeadsDashboard() {
 
   const handleGrabLead = async (leadId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/leads/${leadId}/grab`, {
+      const response = await fetch(`${API_BASE}/api/v1/leads/${leadId}/grab`, {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
@@ -99,7 +102,7 @@ export default function LeadsDashboard() {
 
   const handleStageChange = async (leadId, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/leads/${leadId}/status`, {
+      const response = await fetch(`${API_BASE}/api/v1/leads/${leadId}/status`, {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
@@ -127,7 +130,7 @@ export default function LeadsDashboard() {
     if (!noteText || !noteText.trim()) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/leads/${leadId}/notes`, {
+      const response = await fetch(`${API_BASE}/api/v1/leads/${leadId}/notes`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
